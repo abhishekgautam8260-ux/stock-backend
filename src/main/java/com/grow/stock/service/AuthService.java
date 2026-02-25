@@ -35,6 +35,8 @@ public class AuthService {
         if(repo.findByPhone(req.getPhone()).isPresent())
             throw new RuntimeException("Phone already exists");
 
+        System.out.println("Started");
+
         User user = User.builder()
                 .name(req.getName())
                 .phone(req.getPhone())
