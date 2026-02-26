@@ -25,9 +25,13 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws IOException, ServletException {
 
+        if (request.getMethod().equals("OPTIONS")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String path = request.getRequestURI();
 
-        // allow auth endpoints
         if (path.startsWith("/api/auth")) {
             chain.doFilter(request, response);
             return;
@@ -50,9 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = jwtUtil.extractUsername(token);
 
         var auth = new UsernamePasswordAuthenticationToken(
-                username,
-                null,
-                Collections.emptyList()
+                username, null, Collections.emptyList()
         );
 
         SecurityContextHolder.getContext().setAuthentication(auth);
